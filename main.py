@@ -8,6 +8,11 @@ app = FastAPI()
 # Telefon numarasına karşılık geçici doğrulama kodlarını tutmak için sözlük
 verification_codes = {}
 
+# ✅ Ana sayfa (health check)
+@app.get("/")
+def read_root():
+    return {"message": "SMS Backend is running"}
+
 # Telefon numarası modeli
 class PhoneNumber(BaseModel):
     phone: str
@@ -33,7 +38,7 @@ def verify_code(data: CodeVerification):
         return {"message": "Doğrulama başarılı!"}
     raise HTTPException(status_code=400, detail="Kod yanlış")
 
-# Tarayıcının otomatik istediği favicon.ico isteğine boş yanıt döner
+# favicon.ico isteğine boş yanıt döner (404 önler)
 @app.get("/favicon.ico")
 async def favicon():
     return Response(content="", media_type="image/x-icon")
